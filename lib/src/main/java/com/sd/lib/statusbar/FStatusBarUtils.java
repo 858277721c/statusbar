@@ -30,16 +30,13 @@ public class FStatusBarUtils
             window.getDecorView().setSystemUiVisibility(flag);
 
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS))
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
             if (window.getStatusBarColor() != Color.TRANSPARENT)
                 window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= 19)
         {
-            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS))
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             //虚拟键盘也透明
             //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -53,22 +50,19 @@ public class FStatusBarUtils
     {
         if (Build.VERSION.SDK_INT >= 21)
         {
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            int flag = window.getDecorView().getSystemUiVisibility();
+            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.getDecorView().setSystemUiVisibility(flag);
+
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else if (Build.VERSION.SDK_INT >= 19)
         {
-            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS))
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             //虚拟键盘也透明
             // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
-    }
-
-    private static boolean hasFlag(int original, int flag)
-    {
-        final int result = original & flag;
-        return result != 0;
     }
 
     private static int addFlag(int original, int flag)
