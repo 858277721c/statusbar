@@ -19,13 +19,14 @@ public class FStatusBarUtils
         {
             int flag = window.getDecorView().getSystemUiVisibility();
             flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             if (dark)
             {
+                flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
                 flag = clearFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             } else
             {
                 flag = addFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                flag = clearFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             }
             window.getDecorView().setSystemUiVisibility(flag);
 
