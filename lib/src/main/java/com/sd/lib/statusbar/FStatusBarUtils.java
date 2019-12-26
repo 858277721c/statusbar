@@ -17,18 +17,30 @@ public class FStatusBarUtils
     {
         if (Build.VERSION.SDK_INT >= 21)
         {
+            int flag = window.getDecorView().getSystemUiVisibility();
+            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            if (dark)
+            {
+                flag = clearFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else
+            {
+                flag = addFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+            window.getDecorView().setSystemUiVisibility(flag);
+
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-            int flag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            if (!dark)
-                flag = flag | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS))
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-            window.getDecorView().setSystemUiVisibility(flag);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+            if (window.getStatusBarColor() != Color.TRANSPARENT)
+                window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= 19)
         {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS))
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             //虚拟键盘也透明
             //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
@@ -45,10 +57,30 @@ public class FStatusBarUtils
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else if (Build.VERSION.SDK_INT >= 19)
         {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (!hasFlag(window.getAttributes().flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS))
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             //虚拟键盘也透明
             // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+    }
+
+    private static boolean hasFlag(int original, int flag)
+    {
+        final int result = original & flag;
+        return result != 0;
+    }
+
+    private static int addFlag(int original, int flag)
+    {
+        final int result = original | flag;
+        return result;
+    }
+
+    private static int clearFlag(int original, int flag)
+    {
+        final int result = original & (~flag);
+        return result;
     }
 
     /**
