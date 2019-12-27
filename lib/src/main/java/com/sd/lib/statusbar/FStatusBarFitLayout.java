@@ -5,11 +5,11 @@ import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-public class FFitStatusBarLayout extends FrameLayout
+public class FStatusBarFitLayout extends FrameLayout
 {
     private boolean mFitStatusBar = true;
 
-    public FFitStatusBarLayout(Context context, AttributeSet attrs)
+    public FStatusBarFitLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
